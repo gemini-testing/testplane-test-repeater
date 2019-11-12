@@ -1,0 +1,51 @@
+{
+  "name": "hermione-test-repeater",
+  "version": "0.0.1",
+  "description": "Plugin for repeat tests the specified number of times",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "npm run test-unit && npm run lint",
+    "test-unit": "mocha",
+    "release": "standard-version"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gemini-testing/hermione-test-repeater.git"
+  },
+  "keywords": [
+    "hermione",
+    "plugin",
+    "repeater"
+  ],
+  "author": "Dmitriy Dudkevich <dudkevich@yandex-team.ru>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gemini-testing/hermione-test-repeater/issues"
+  },
+  "homepage": "https://github.com/gemini-testing/hermione-test-repeater#readme",
+  "dependencies": {
+    "gemini-configparser": "^1.0.0"
+  },
+  "devDependencies": {
+    "app-module-path": "^2.2.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "conventional-changelog-lint": "^2.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-gemini-testing": "^2.8.0",
+    "husky": "^3.0.9",
+    "mocha": "^6.2.2",
+    "sinon": "^7.5.0",
+    "standard-version": "^7.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "conventional-changelog-lint -e",
+      "pre-commit": "npm run lint"
+    }
+  }
+}
