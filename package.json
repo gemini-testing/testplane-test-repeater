@@ -38,6 +38,7 @@
     "chai-as-promised": "^7.1.1",
     "eslint": "^5.16.0",
     "eslint-config-gemini-testing": "^2.8.0",
+    "gemini-core": "^3.8.2",
     "husky": "^3.0.9",
     "mocha": "^6.2.2",
     "sinon": "^7.5.0",
