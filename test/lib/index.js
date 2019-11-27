@@ -83,6 +83,12 @@ describe('plugin', () => {
         assert.calledOnceWith(cliTool.option, '--repeat <number>', sinon.match.string, sinon.match.func);
     });
 
+    it('should not crash if plugin is using through hermione api', async () => {
+        plugin(hermione, {repeat: 100500});
+
+        await assert.isFulfilled(hermione.emitAndWait(hermione.events.INIT));
+    });
+
     describe('"INIT" event', () => {
         describe('if "repeat" option is not specified', () => {
             it('should not reset retries', async () => {
