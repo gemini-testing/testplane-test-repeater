@@ -23,7 +23,7 @@ describe('plugin', () => {
             CLI: 'cli',
             INIT: 'init',
             AFTER_TESTS_READ: 'afterTestsRead',
-            RUNNER_START: 'runnerStart',
+            BEGIN: 'begin',
             TEST_PASS: 'testPass',
             TEST_FAIL: 'testFail',
             RETRY: 'retry'
@@ -126,7 +126,7 @@ describe('plugin', () => {
                 plugin(hermione, {repeat: 100500});
 
                 await _initPlugin();
-                await hermione.emitAndWait(hermione.events.RUNNER_START);
+                hermione.emit(hermione.events.BEGIN);
 
                 assert.calledOnceWith(Repeater.prototype.repeat, 100500);
             });
@@ -135,7 +135,7 @@ describe('plugin', () => {
                 plugin(hermione, {repeat: 100500});
 
                 await _initPlugin({cliOpts: {repeat: 500100}});
-                await hermione.emitAndWait(hermione.events.RUNNER_START);
+                hermione.emit(hermione.events.BEGIN);
 
                 assert.calledOnceWith(Repeater.prototype.repeat, 500100);
             });
@@ -148,7 +148,7 @@ describe('plugin', () => {
                     plugin(hermione, {[option]: 10});
 
                     await _initPlugin({cliOpts: {repeat}});
-                    await hermione.emitAndWait(hermione.events.RUNNER_START);
+                    hermione.emit(hermione.events.BEGIN);
 
                     assert.calledOnceWith(Repeater.prototype.repeat, 10);
                 });
