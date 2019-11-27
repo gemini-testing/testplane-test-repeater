@@ -5,7 +5,7 @@ const Repeater = require('lib/repeater');
 describe('Repeater', () => {
     let hermione;
 
-    const _mkTest = ({browserId = 'default-bro'} = {}) => ({browserId});
+    const _mkTest = (test = {}) => ({browserId: 'dafault-bro', ...test});
     const _mkTestCollection = (tests) => ({eachTest: (cb) => tests.forEach(cb)});
     const _mkRepeatCounter = () => ({addTest: sinon.stub()});
 
@@ -16,6 +16,23 @@ describe('Repeater', () => {
     afterEach(() => sinon.restore());
 
     describe('"repeat" method', () => {
+        [
+            {name: 'skipped', field: 'pending'},
+            {name: 'silently skipped', field: 'silentSkip'}
+        ].forEach(({name, field}) => {
+            it(`should not repeat ${name} test`, () => {
+                const repeatCounter = _mkRepeatCounter();
+                const repeater = Repeater.create(hermione, repeatCounter);
+                const test = _mkTest({[field]: true});
+                repeater.setTestCollection(_mkTestCollection([test]));
+
+                repeater.repeat(1);
+
+                assert.notCalled(repeatCounter.addTest);
+                assert.notCalled(hermione.addTestToRun);
+            });
+        });
+
         it('should register each test in repeat counter', () => {
             const repeatCounter = _mkRepeatCounter();
             const repeater = Repeater.create(hermione, repeatCounter);
