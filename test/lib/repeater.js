@@ -18,7 +18,8 @@ describe('Repeater', () => {
     describe('"repeat" method', () => {
         [
             {name: 'skipped', field: 'pending'},
-            {name: 'silently skipped', field: 'silentSkip'}
+            {name: 'silently skipped', field: 'silentSkip'},
+            {name: 'disabled', field: 'disabled'}
         ].forEach(({name, field}) => {
             it(`should not repeat ${name} test`, () => {
                 const repeatCounter = _mkRepeatCounter();
