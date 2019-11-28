@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/gemini-testing/hermione-test-repeater/compare/v0.0.5...v0.0.6) (2019-11-28)
+
+
+### Bug Fixes
+
+* should not repeat disabled tests ([9291010](https://github.com/gemini-testing/hermione-test-repeater/commit/92910104f018587f3439124f3921d4cd8d5f0733))
+
 ### [0.0.5](https://github.com/gemini-testing/hermione-test-repeater/compare/v0.0.4...v0.0.5) (2019-11-27)
 
 
