@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/gemini-testing/hermione-test-repeater/compare/v0.0.6...v0.0.7) (2019-12-13)
+
+
+### Features
+
+* **plugin:** add ability for running each test in unique session ([49fb2de](https://github.com/gemini-testing/hermione-test-repeater/commit/49fb2de05c6e54fabbec2bf124c12332bb9fb6ad))
+
 ### [0.0.6](https://github.com/gemini-testing/hermione-test-repeater/compare/v0.0.5...v0.0.6) (2019-11-28)
 
 
