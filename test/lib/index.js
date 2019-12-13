@@ -101,6 +101,16 @@ describe('plugin', () => {
                 assert.equal(browsers.yabro.retry, 100500);
             });
 
+            it('should not reset testsPerSession option', async () => {
+                const browsers = {yabro: {testsPerSession: 100500}};
+                const hermione = _mkHermione({browsers});
+                plugin(hermione);
+
+                await _initPlugin({hermioneInst: hermione});
+
+                assert.equal(browsers.yabro.testsPerSession, 100500);
+            });
+
             it('should not create instance of repeater', async () => {
                 plugin(hermione);
 
@@ -120,6 +130,27 @@ describe('plugin', () => {
 
                 assert.equal(browsers.yabro1.retry, 0);
                 assert.equal(browsers.yabro2.retry, 0);
+            });
+
+            it('should reset testsPerSession option for each browser by default', async () => {
+                const browsers = {yabro1: {testsPerSession: 100}, yabro2: {testsPerSession: 500}};
+                const hermione = _mkHermione({browsers});
+                plugin(hermione);
+
+                await _initPlugin({cliOpts: {repeat: 100}, hermioneInst: hermione});
+
+                assert.equal(browsers.yabro1.testsPerSession, 1);
+                assert.equal(browsers.yabro2.testsPerSession, 1);
+            });
+
+            it('should not reset testsPerSession option if it disabled from config', async () => {
+                const browsers = {yabro1: {testsPerSession: 100}};
+                const hermione = _mkHermione({browsers});
+                plugin(hermione, {uniqSession: false});
+
+                await _initPlugin({cliOpts: {repeat: 100}, hermioneInst: hermione});
+
+                assert.equal(browsers.yabro1.testsPerSession, 100);
             });
 
             it('should use option from plugin config if it does not specified through cli', async () => {

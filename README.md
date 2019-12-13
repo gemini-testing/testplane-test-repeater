@@ -20,7 +20,8 @@ Plugin has following configuration:
 - **enabled** (optional) `Boolean` – enable/disable the plugin. `true` by default;
 - **repeat** (optional) `Number` – how many times tests should be repeated regardless of the result. `0` by default;
 - **minRepeat** (optional) `Number` - minimum limit of repeat count. `0` by default;
-- **maxRepeat** (optional) `Number` - maximum limit of repeat count. `Infinity` by default.
+- **maxRepeat** (optional) `Number` - maximum limit of repeat count. `Infinity` by default;
+- **uniqSession** (optional) `Boolean` - run each test in a unique session. `true` by default.
 
 Also there is ability to override plugin parameters by CLI options or environment variables
 (see [configparser](https://github.com/gemini-testing/configparser)).
@@ -43,7 +44,8 @@ module.exports = {
             enabled: true,
             repeat: 50,
             minRepeat: 10,
-            maxRepeat: 100
+            maxRepeat: 100,
+            uniqSession: true
         },
     },
     // ...
