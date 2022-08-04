@@ -1,10 +1,10 @@
 'use strict';
 
-const {AsyncEmitter} = require('gemini-core').events;
 const plugin = require('lib');
 const RepeatCounter = require('lib/repeat-counter');
 const Repeater = require('lib/repeater');
 const {logger} = require('lib/utils');
+const EventEmitter2 = require('eventemitter2');
 
 describe('plugin', () => {
     let hermione;
@@ -12,7 +12,7 @@ describe('plugin', () => {
     const _mkHermione = (opts = {}) => {
         opts = {proc: 'master', browsers: {}, ...opts};
 
-        const hermione = new AsyncEmitter();
+        const hermione = new EventEmitter2();
         hermione.isWorker = sinon.stub().returns(opts.proc === 'worker');
         hermione.intercept = sinon.stub();
         hermione.config = {
@@ -36,7 +36,7 @@ describe('plugin', () => {
         cliOpts = {option: sinon.stub(), ...cliOpts};
 
         hermioneInst.emit(hermioneInst.events.CLI, cliOpts);
-        await hermioneInst.emitAndWait(hermioneInst.events.INIT);
+        await hermioneInst.emitAsync(hermioneInst.events.INIT);
     };
 
     beforeEach(() => {
@@ -86,7 +86,7 @@ describe('plugin', () => {
     it('should not crash if plugin is using through hermione api', async () => {
         plugin(hermione, {repeat: 100500});
 
-        await assert.isFulfilled(hermione.emitAndWait(hermione.events.INIT));
+        await assert.isFulfilled(hermione.emitAsync(hermione.events.INIT));
     });
 
     describe('"INIT" event', () => {
