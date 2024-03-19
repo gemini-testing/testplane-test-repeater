@@ -28,7 +28,8 @@
   },
   "homepage": "https://github.com/gemini-testing/hermione-test-repeater#readme",
   "dependencies": {
-    "gemini-configparser": "^1.0.0"
+    "gemini-configparser": "^1.0.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
