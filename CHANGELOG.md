@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/gemini-testing/hermione-test-repeater/compare/v0.0.8...v0.0.9) (2024-03-19)
+
+
+### Bug Fixes
+
+* add lodash to deps ([6ca3e57](https://github.com/gemini-testing/hermione-test-repeater/commit/6ca3e5714c3b37820527d3e62fd10367606dc187))
+
 ### [0.0.8](https://github.com/gemini-testing/hermione-test-repeater/compare/v0.0.7...v0.0.8) (2020-08-17)
 
 
