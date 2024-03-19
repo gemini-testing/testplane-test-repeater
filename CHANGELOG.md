@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/gemini-testing/hermione-test-repeater/compare/v0.0.9...v1.0.0) (2024-03-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* nodejs versions less than 12.0.0 are no longer supported
+
+### Features
+
+* nodejs versions less than 16.0.0 are no longer supported ([fc91a56](https://github.com/gemini-testing/hermione-test-repeater/commit/fc91a568ccf3bdd1f5b83ebe5e1bf2584f2fcb6e))
+
 ### [0.0.9](https://github.com/gemini-testing/hermione-test-repeater/compare/v0.0.8...v0.0.9) (2024-03-19)
 
 
