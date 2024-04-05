@@ -7,19 +7,19 @@ const {logger} = require('lib/utils');
 const EventEmitter2 = require('eventemitter2');
 
 describe('plugin', () => {
-    let hermione;
+    let testplane;
 
-    const _mkHermione = (opts = {}) => {
+    const _mkTestplane = (opts = {}) => {
         opts = {proc: 'master', browsers: {}, ...opts};
 
-        const hermione = new EventEmitter2();
-        hermione.isWorker = sinon.stub().returns(opts.proc === 'worker');
-        hermione.intercept = sinon.stub();
-        hermione.config = {
+        const testplane = new EventEmitter2();
+        testplane.isWorker = sinon.stub().returns(opts.proc === 'worker');
+        testplane.intercept = sinon.stub();
+        testplane.config = {
             getBrowserIds: () => Object.keys(opts.browsers),
             forBrowser: (id) => opts.browsers[id]
         };
-        hermione.events = {
+        testplane.events = {
             CLI: 'cli',
             INIT: 'init',
             AFTER_TESTS_READ: 'afterTestsRead',
@@ -29,14 +29,14 @@ describe('plugin', () => {
             RETRY: 'retry'
         };
 
-        return hermione;
+        return testplane;
     };
 
-    const _initPlugin = async ({cliOpts = {}, hermioneInst = hermione} = {}) => {
+    const _initPlugin = async ({cliOpts = {}, testplaneInst = testplane} = {}) => {
         cliOpts = {option: sinon.stub(), ...cliOpts};
 
-        hermioneInst.emit(hermioneInst.events.CLI, cliOpts);
-        await hermioneInst.emitAsync(hermioneInst.events.INIT);
+        testplaneInst.emit(testplaneInst.events.CLI, cliOpts);
+        await testplaneInst.emitAsync(testplaneInst.events.INIT);
     };
 
     beforeEach(() => {
@@ -50,69 +50,69 @@ describe('plugin', () => {
 
         sinon.stub(logger, 'info');
 
-        hermione = _mkHermione();
+        testplane = _mkTestplane();
     });
 
     afterEach(() => sinon.restore());
 
     it('should do nothing if plugin is disabled', () => {
-        sinon.spy(hermione, 'on');
+        sinon.spy(testplane, 'on');
 
-        plugin(hermione, {enabled: false});
+        plugin(testplane, {enabled: false});
 
-        assert.notCalled(hermione.on);
+        assert.notCalled(testplane.on);
         assert.notCalled(Repeater.create);
     });
 
     it('should do nothing in worker process', () => {
-        const hermione = _mkHermione({proc: 'worker'});
-        sinon.spy(hermione, 'on');
+        const testplane = _mkTestplane({proc: 'worker'});
+        sinon.spy(testplane, 'on');
 
-        plugin(hermione);
+        plugin(testplane);
 
-        assert.notCalled(hermione.on);
+        assert.notCalled(testplane.on);
         assert.notCalled(Repeater.create);
     });
 
     it('should extend cli by "repeat" option on "CLI" event', () => {
         const cliTool = {option: sinon.stub()};
-        plugin(hermione);
+        plugin(testplane);
 
-        hermione.emit(hermione.events.CLI, cliTool);
+        testplane.emit(testplane.events.CLI, cliTool);
 
         assert.calledOnceWith(cliTool.option, '--repeat <number>', sinon.match.string, sinon.match.func);
     });
 
-    it('should not crash if plugin is using through hermione api', async () => {
-        plugin(hermione, {repeat: 100500});
+    it('should not crash if plugin is using through testplane api', async () => {
+        plugin(testplane, {repeat: 100500});
 
-        await assert.isFulfilled(hermione.emitAsync(hermione.events.INIT));
+        await assert.isFulfilled(testplane.emitAsync(testplane.events.INIT));
     });
 
     describe('"INIT" event', () => {
         describe('if "repeat" option is not specified', () => {
             it('should not reset retries', async () => {
                 const browsers = {yabro: {retry: 100500}};
-                const hermione = _mkHermione({browsers});
-                plugin(hermione);
+                const testplane = _mkTestplane({browsers});
+                plugin(testplane);
 
-                await _initPlugin({hermioneInst: hermione});
+                await _initPlugin({testplaneInst: testplane});
 
                 assert.equal(browsers.yabro.retry, 100500);
             });
 
             it('should not reset testsPerSession option', async () => {
                 const browsers = {yabro: {testsPerSession: 100500}};
-                const hermione = _mkHermione({browsers});
-                plugin(hermione);
+                const testplane = _mkTestplane({browsers});
+                plugin(testplane);
 
-                await _initPlugin({hermioneInst: hermione});
+                await _initPlugin({testplaneInst: testplane});
 
                 assert.equal(browsers.yabro.testsPerSession, 100500);
             });
 
             it('should not create instance of repeater', async () => {
-                plugin(hermione);
+                plugin(testplane);
 
                 await _initPlugin();
 
@@ -123,10 +123,10 @@ describe('plugin', () => {
         describe('if "repeat" option is specified', () => {
             it('should reset retries for each browser', async () => {
                 const browsers = {yabro1: {retry: 100500}, yabro2: {retry: 500100}};
-                const hermione = _mkHermione({browsers});
-                plugin(hermione);
+                const testplane = _mkTestplane({browsers});
+                plugin(testplane);
 
-                await _initPlugin({cliOpts: {repeat: 100500}, hermioneInst: hermione});
+                await _initPlugin({cliOpts: {repeat: 100500}, testplaneInst: testplane});
 
                 assert.equal(browsers.yabro1.retry, 0);
                 assert.equal(browsers.yabro2.retry, 0);
@@ -134,10 +134,10 @@ describe('plugin', () => {
 
             it('should reset testsPerSession option for each browser by default', async () => {
                 const browsers = {yabro1: {testsPerSession: 100}, yabro2: {testsPerSession: 500}};
-                const hermione = _mkHermione({browsers});
-                plugin(hermione);
+                const testplane = _mkTestplane({browsers});
+                plugin(testplane);
 
-                await _initPlugin({cliOpts: {repeat: 100}, hermioneInst: hermione});
+                await _initPlugin({cliOpts: {repeat: 100}, testplaneInst: testplane});
 
                 assert.equal(browsers.yabro1.testsPerSession, 1);
                 assert.equal(browsers.yabro2.testsPerSession, 1);
@@ -145,28 +145,28 @@ describe('plugin', () => {
 
             it('should not reset testsPerSession option if it disabled from config', async () => {
                 const browsers = {yabro1: {testsPerSession: 100}};
-                const hermione = _mkHermione({browsers});
-                plugin(hermione, {uniqSession: false});
+                const testplane = _mkTestplane({browsers});
+                plugin(testplane, {uniqSession: false});
 
-                await _initPlugin({cliOpts: {repeat: 100}, hermioneInst: hermione});
+                await _initPlugin({cliOpts: {repeat: 100}, testplaneInst: testplane});
 
                 assert.equal(browsers.yabro1.testsPerSession, 100);
             });
 
             it('should use option from plugin config if it does not specified through cli', async () => {
-                plugin(hermione, {repeat: 100500});
+                plugin(testplane, {repeat: 100500});
 
                 await _initPlugin();
-                hermione.emit(hermione.events.BEGIN);
+                testplane.emit(testplane.events.BEGIN);
 
                 assert.calledOnceWith(Repeater.prototype.repeat, 100500);
             });
 
             it('should use option from cli even if it specified in plugin config', async () => {
-                plugin(hermione, {repeat: 100500});
+                plugin(testplane, {repeat: 100500});
 
                 await _initPlugin({cliOpts: {repeat: 500100}});
-                hermione.emit(hermione.events.BEGIN);
+                testplane.emit(testplane.events.BEGIN);
 
                 assert.calledOnceWith(Repeater.prototype.repeat, 500100);
             });
@@ -176,17 +176,17 @@ describe('plugin', () => {
                 {name: 'max', option: 'maxRepeat', repeat: 100500}
             ].forEach(({name, option, repeat}) => {
                 it(`should limit option by ${name} value from plugin config`, async () => {
-                    plugin(hermione, {[option]: 10});
+                    plugin(testplane, {[option]: 10});
 
                     await _initPlugin({cliOpts: {repeat}});
-                    hermione.emit(hermione.events.BEGIN);
+                    testplane.emit(testplane.events.BEGIN);
 
                     assert.calledOnceWith(Repeater.prototype.repeat, 10);
                 });
             });
 
             it('should inform that repeat count was changed if it outside of limits', async () => {
-                plugin(hermione, {minRepeat: 10, maxRepeat: 50});
+                plugin(testplane, {minRepeat: 10, maxRepeat: 50});
 
                 await _initPlugin({cliOpts: {repeat: 5}});
 
@@ -197,7 +197,7 @@ describe('plugin', () => {
             });
 
             it('should not inform if repeat count is within limits', async () => {
-                plugin(hermione, {minRepeat: 10, maxRepeat: 20});
+                plugin(testplane, {minRepeat: 10, maxRepeat: 20});
 
                 await _initPlugin({cliOpts: {repeat: 15}});
 
@@ -205,44 +205,44 @@ describe('plugin', () => {
             });
 
             it('should init repeat counter instance', async () => {
-                plugin(hermione);
+                plugin(testplane);
 
                 await _initPlugin({cliOpts: {repeat: 1}});
 
                 assert.calledOnceWithExactly(RepeatCounter.create);
             });
 
-            it('should init repeater with hermione and repeat counter instances', async () => {
-                plugin(hermione);
+            it('should init repeater with testplane and repeat counter instances', async () => {
+                plugin(testplane);
 
                 await _initPlugin({cliOpts: {repeat: 1}});
 
-                assert.calledOnceWith(Repeater.create, hermione, RepeatCounter.prototype);
+                assert.calledOnceWith(Repeater.create, testplane, RepeatCounter.prototype);
             });
 
             it('should set test collection in repeater on "AFTER_TESTS_READ" event', async () => {
-                plugin(hermione);
+                plugin(testplane);
                 const testCollection = {};
 
                 await _initPlugin({cliOpts: {repeat: 1}});
-                hermione.emit(hermione.events.AFTER_TESTS_READ, testCollection);
+                testplane.emit(testplane.events.AFTER_TESTS_READ, testCollection);
 
                 assert.calledOnceWith(Repeater.prototype.setTestCollection, testCollection);
             });
 
             describe('"TEST_FAIL" interceptor', () => {
                 const callInterceptorCb = (arg) => {
-                    const cb = hermione.intercept.lastCall.args[1];
+                    const cb = testplane.intercept.lastCall.args[1];
 
                     return cb(arg);
                 };
 
                 it('should intercept event', async () => {
-                    plugin(hermione);
+                    plugin(testplane);
 
                     await _initPlugin({cliOpts: {repeat: 100500}});
 
-                    assert.calledWith(hermione.intercept, hermione.events.TEST_FAIL);
+                    assert.calledWith(testplane.intercept, testplane.events.TEST_FAIL);
                 });
 
                 describe('if repeat count of test is positive', () => {
@@ -251,16 +251,16 @@ describe('plugin', () => {
                     });
 
                     it('should translate event to "RETRY"', async () => {
-                        plugin(hermione);
+                        plugin(testplane);
 
                         await _initPlugin({cliOpts: {repeat: 100500}});
                         const translated = callInterceptorCb({data: {}});
 
-                        assert.equal(translated.event, hermione.events.RETRY);
+                        assert.equal(translated.event, testplane.events.RETRY);
                     });
 
                     it('should add "retriesLeft" field to translated test data', async () => {
-                        plugin(hermione);
+                        plugin(testplane);
 
                         await _initPlugin({cliOpts: {repeat: 100500}});
                         const translated = callInterceptorCb({data: {foo: 'bar'}});
@@ -271,7 +271,7 @@ describe('plugin', () => {
 
                 it('should not change intercepted event if repeat count of test is not positive', async () => {
                     RepeatCounter.prototype.getRepeatsLeft.returns(0);
-                    plugin(hermione);
+                    plugin(testplane);
 
                     await _initPlugin({cliOpts: {repeat: 100500}});
                     const translated = callInterceptorCb({event: 'TEST_FAIL', data: {foo: 'bar'}});
@@ -284,10 +284,10 @@ describe('plugin', () => {
                 describe(`${event} handler`, () => {
                     it('should count test as executed', async () => {
                         const test = {};
-                        plugin(hermione);
+                        plugin(testplane);
 
                         await _initPlugin({cliOpts: {repeat: 100500}});
-                        hermione.emit(hermione.events[event], test);
+                        testplane.emit(testplane.events[event], test);
 
                         assert.calledOnceWith(RepeatCounter.prototype.testExecuted, test);
                     });
