@@ -1,25 +1,25 @@
-# hermione-test-repeater
+# @testplane/test-repeater
 
 ## Обзор
 
-Используйте плагин [hermione-test-repeater][hermione-test-repeater], чтобы запустить один и тот же тест (или группу тестов) требуемое количество раз.
+Используйте плагин [@testplane/test-repeater][@testplane/test-repeater], чтобы запустить один и тот же тест (или группу тестов) требуемое количество раз.
 
 Данный плагин может пригодиться в тех случаях, когда нужно убедиться в стабильности написанных тестов. Плагин гарантирует, что тесты будут запущены столько раз, сколько вы задали, независимо от результатов их прогона в каждой попытке. Кроме того, плагин позволяет запускать тесты каждый раз в новой сессии браузера. Это исключает влияние деградации браузера или еще какие-либо побочные эффекты, которые могли бы возникнуть при повторных прогонах в одной и той же сессии браузера.
 
 ## Установка
 
 ```bash
-npm install -D hermione-test-repeater
+npm install -D @testplane/test-repeater
 ```
 
 ## Настройка
 
-Необходимо подключить плагин в разделе `plugins` конфига `hermione`:
+Необходимо подключить плагин в разделе `plugins` конфига `testplane`:
 
 ```javascript
 module.exports = {
     plugins: {
-        'hermione-test-repeater': {
+        '@testplane/test-repeater': {
             enabled: true,
             repeat: 50,
             minRepeat: 10,
@@ -27,10 +27,10 @@ module.exports = {
             uniqSession: true
         },
 
-        // другие плагины гермионы...
+        // другие плагины testplane...
     },
 
-    // другие настройки гермионы...
+    // другие настройки testplane...
 }
 ```
 
@@ -46,31 +46,31 @@ module.exports = {
 
 ### Передача параметров через CLI
 
-Все параметры плагина, которые можно определить в конфиге, можно также передать в виде опций командной строки или через переменные окружения во время запуска гермионы. Используйте префикс `--test-repeater-` для опций командной строки и `hermione_test_repeater_` &mdash; для переменных окружения. Например:
+Все параметры плагина, которые можно определить в конфиге, можно также передать в виде опций командной строки или через переменные окружения во время запуска testplane. Используйте префикс `--test-repeater-` для опций командной строки и `testplane_test_repeater_` &mdash; для переменных окружения. Например:
 
 ```bash
-npx hermione --test-repeater-repeat 5
+npx testplane --test-repeater-repeat 5
 ```
 
 ```bash
-hermione_test_repeater_repeat=5 npx hermione
+testplane_test_repeater_repeat=5 npx testplane
 ```
 
 ## Использование
 
 ### Опция --repeat
 
-Также плагин добавляет к [CLI][cli] гермионы специальную опцию `--repeat`, с помощью которой можно запустить тест нужное количество раз более удобным образом. Например:
+Также плагин добавляет к [CLI][cli] testplane специальную опцию `--repeat`, с помощью которой можно запустить тест нужное количество раз более удобным образом. Например:
 
 ```bash
-npx hermione --repeat 5
+npx testplane --repeat 5
 ```
 
 [cli]: https://ru.wikipedia.org/wiki/Интерфейс_командной_строки
 
 ## Полезные ссылки
 
-* [Исходники плагина hermione-test-repeater][hermione-test-repeater]
+* [Исходники плагина @testplane/test-repeater][@testplane/test-repeater]
 
-[hermione-test-repeater]: https://github.com/gemini-testing/hermione-test-repeater
+[@testplane/test-repeater]: https://github.com/gemini-testing/testplane-test-repeater
 [cli]: https://ru.wikipedia.org/wiki/Интерфейс_командной_строки
