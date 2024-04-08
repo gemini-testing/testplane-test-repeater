@@ -1,6 +1,6 @@
 {
   "name": "@testplane/test-repeater",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Plugin for repeat tests the specified number of times",
   "main": "lib/index.js",
   "scripts": {
