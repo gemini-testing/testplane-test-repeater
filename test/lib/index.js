@@ -209,7 +209,7 @@ describe('plugin', () => {
 
                 await _initPlugin({cliOpts: {repeat: 1}});
 
-                assert.calledOnceWithExactly(RepeatCounter.create);
+                assert.calledOnceWith(RepeatCounter.create, testplane, true);
             });
 
             it('should init repeater with testplane and repeat counter instances', async () => {

@@ -23,7 +23,7 @@ describe('Repeater', () => {
         ].forEach(({name, field}) => {
             it(`should not repeat ${name} test`, () => {
                 const repeatCounter = _mkRepeatCounter();
-                const repeater = Repeater.create(testplane, repeatCounter);
+                const repeater = Repeater.create(testplane, repeatCounter, true);
                 const test = _mkTest({[field]: true});
                 repeater.setTestCollection(_mkTestCollection([test]));
 
@@ -36,7 +36,7 @@ describe('Repeater', () => {
 
         it('should register each test in repeat counter', () => {
             const repeatCounter = _mkRepeatCounter();
-            const repeater = Repeater.create(testplane, repeatCounter);
+            const repeater = Repeater.create(testplane, repeatCounter, true);
             const tests = [_mkTest(), _mkTest()];
             repeater.setTestCollection(_mkTestCollection(tests));
 
@@ -48,7 +48,7 @@ describe('Repeater', () => {
         });
 
         it('should repeat test the specified number of repeats', () => {
-            const repeater = Repeater.create(testplane, _mkRepeatCounter());
+            const repeater = Repeater.create(testplane, _mkRepeatCounter(), true);
             const test = _mkTest({browserId: 'yabro-1'});
             repeater.setTestCollection(_mkTestCollection([test]));
 

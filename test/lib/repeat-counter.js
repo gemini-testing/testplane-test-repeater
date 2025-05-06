@@ -8,8 +8,11 @@ describe('RepeatCounter', () => {
 
     const _mkTest = ({id = '100500', browserId = 'default-bro'} = {}) => ({id, browserId});
 
+    let testplane;
+
     beforeEach(() => {
-        repeatCounter = RepeatCounter.create();
+        testplane = {addTestToRun: sinon.stub()};
+        repeatCounter = RepeatCounter.create(testplane);
         sinon.stub(logger, 'info');
     });
 

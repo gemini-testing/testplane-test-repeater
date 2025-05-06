@@ -24,7 +24,8 @@ module.exports = {
             repeat: 50,
             minRepeat: 10,
             maxRepeat: 100,
-            uniqSession: true
+            uniqSession: true,
+            parallelRepeats: true
         },
 
         // другие плагины testplane...
@@ -43,6 +44,7 @@ module.exports = {
 | minRepeat | Number | 0 | Минимальное количество раз, которые можно запустить тест. |
 | maxRepeat | Number | Infinity | Максимальное количество раз, которые можно запустить тест. |
 | uniqSession | Boolean | true | Запускать каждый тест в уникальной сессии браузера. |
+| parallelRepeats | Boolean | true | Определяет режим запуска повторов теста: сразу (параллельное выполнение), либо после завершения предыдущего (последовательное выполнение). |
 
 ### Передача параметров через CLI
 
