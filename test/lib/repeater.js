@@ -7,7 +7,7 @@ describe('Repeater', () => {
 
     const _mkTest = (test = {}) => ({browserId: 'dafault-bro', ...test});
     const _mkTestCollection = (tests) => ({eachTest: (cb) => tests.forEach(cb)});
-    const _mkRepeatCounter = () => ({addTest: sinon.stub()});
+    const _mkRepeatCounter = () => ({addTest: sinon.stub(), testExecuted: sinon.stub()});
 
     beforeEach(() => {
         testplane = {addTestToRun: sinon.stub()};
@@ -57,6 +57,61 @@ describe('Repeater', () => {
             assert.calledTwice(testplane.addTestToRun);
             assert.calledWith(testplane.addTestToRun.firstCall, test, test.browserId);
             assert.calledWith(testplane.addTestToRun.secondCall, test, test.browserId);
+        });
+
+        it('should not repeat test when parallelRepeats is false', () => {
+            const repeater = Repeater.create(testplane, _mkRepeatCounter(), false);
+            const test = _mkTest({browserId: 'yabro-1'});
+            repeater.setTestCollection(_mkTestCollection([test]));
+
+            repeater.repeat(2);
+
+            assert.notCalled(testplane.addTestToRun);
+        });
+    });
+
+    describe('"handleTestEnd" method', () => {
+        it('should call testExecuted on repeat counter', () => {
+            const repeatCounter = _mkRepeatCounter();
+            const repeater = Repeater.create(testplane, repeatCounter, true);
+            const test = _mkTest();
+
+            repeater.handleTestEnd(test);
+
+            assert.calledOnceWith(repeatCounter.testExecuted, test);
+        });
+
+        it('should add test to run when parallelRepeats is false and test has repeats left', () => {
+            const repeatCounter = _mkRepeatCounter();
+            repeatCounter.getRepeatsLeft = sinon.stub().returns(1);
+            const repeater = Repeater.create(testplane, repeatCounter, false);
+            const test = _mkTest({browserId: 'yabro-1'});
+
+            repeater.handleTestEnd(test);
+
+            assert.calledOnceWith(testplane.addTestToRun, test, test.browserId);
+        });
+
+        it('should not add test to run when parallelRepeats is false and test has no repeats left', () => {
+            const repeatCounter = _mkRepeatCounter();
+            repeatCounter.getRepeatsLeft = sinon.stub().returns(0);
+            const repeater = Repeater.create(testplane, repeatCounter, false);
+            const test = _mkTest();
+
+            repeater.handleTestEnd(test);
+
+            assert.notCalled(testplane.addTestToRun);
+        });
+
+        it('should not add test to run when parallelRepeats is true', () => {
+            const repeatCounter = _mkRepeatCounter();
+            repeatCounter.getRepeatsLeft = sinon.stub().returns(1);
+            const repeater = Repeater.create(testplane, repeatCounter, true);
+            const test = _mkTest();
+
+            repeater.handleTestEnd(test);
+
+            assert.notCalled(testplane.addTestToRun);
         });
     });
 });

@@ -47,6 +47,7 @@ describe('plugin', () => {
         sinon.stub(Repeater, 'create').returns(Object.create(Repeater.prototype));
         sinon.stub(Repeater.prototype, 'setTestCollection');
         sinon.stub(Repeater.prototype, 'repeat');
+        sinon.stub(Repeater.prototype, 'handleTestEnd');
 
         sinon.stub(logger, 'info');
 
@@ -209,7 +210,7 @@ describe('plugin', () => {
 
                 await _initPlugin({cliOpts: {repeat: 1}});
 
-                assert.calledOnceWith(RepeatCounter.create, testplane, true);
+                assert.calledOnceWith(RepeatCounter.create);
             });
 
             it('should init repeater with testplane and repeat counter instances', async () => {
@@ -282,14 +283,14 @@ describe('plugin', () => {
 
             ['TEST_PASS', 'RETRY'].forEach((event) => {
                 describe(`${event} handler`, () => {
-                    it('should count test as executed', async () => {
+                    it('should handle test end', async () => {
                         const test = {};
                         plugin(testplane);
 
                         await _initPlugin({cliOpts: {repeat: 100500}});
                         testplane.emit(testplane.events[event], test);
 
-                        assert.calledOnceWith(RepeatCounter.prototype.testExecuted, test);
+                        assert.calledOnceWith(Repeater.prototype.handleTestEnd, test);
                     });
                 });
             });
