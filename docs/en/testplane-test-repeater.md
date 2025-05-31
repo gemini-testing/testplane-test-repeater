@@ -24,7 +24,8 @@ module.exports = {
             repeat: 50,
             minRepeat: 10,
             maxRepeat: 100,
-            uniqSession: true
+            uniqSession: true,
+            parallelRepeats: true
         },
 
         // other testplane plugins...
@@ -43,6 +44,7 @@ module.exports = {
 | minRepeat | Number | 0 | The minimum number of times the test can be run. |
 | maxRepeat | Number | Infinity | The maximum number of times the test can be run. |
 | uniqSession | Boolean | true | Run each test in a unique browser session. |
+| parallelRepeats | Boolean | true | Determines the test repeat execution mode: immediately (parallel execution) or after the previous one completes (sequential execution). |
 
 ### Passing parameters via the CLI
 
