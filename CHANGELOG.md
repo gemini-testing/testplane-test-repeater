@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/gemini-testing/testplane-test-repeater/compare/v1.0.0...v1.1.0) (2025-05-31)
+
+
+### Features
+
+* add strategy for controlling test repeat execution mode ([526869f](https://github.com/gemini-testing/testplane-test-repeater/commit/526869f833d3ff68a56d0d0ac99e17c726227ab4))
+
 ## [1.0.0](https://github.com/gemini-testing/hermione-test-repeater/compare/v0.0.9...v1.0.0) (2024-03-19)
 
 
