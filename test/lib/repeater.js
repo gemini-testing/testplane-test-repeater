@@ -94,7 +94,8 @@ describe('Repeater', () => {
 
         it('should not add test to run when parallelRepeats is false and test has no repeats left', () => {
             const repeatCounter = _mkRepeatCounter();
-            repeatCounter.getRepeatsLeft = sinon.stub().returns(0);
+            // If repeats are set 0 and parallelRepeats is false, getRepeatsLeft would return -1 at runtime
+            repeatCounter.getRepeatsLeft = sinon.stub().returns(-1);
             const repeater = Repeater.create(testplane, repeatCounter, false);
             const test = _mkTest();
 
